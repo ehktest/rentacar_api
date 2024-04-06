@@ -13,9 +13,9 @@
       "name": "MIT"
     }
   },
-  "host": "127.0.0.1:8000",
+  "host": "rentacar-api-ehkarabas.onrender.com",
   "basePath": "/",
-  "schemes": ["http", "https"],
+  "schemes": ["https"],
   "securityDefinitions": {
     "ClassicToken": {
       "type": "apiKey",
