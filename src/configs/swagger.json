@@ -1,0 +1,1804 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Rent A Car API",
+    "description": "Rent A Car Management System",
+    "contact": {
+      "name": "Huseyin Karabas",
+      "email": "ehkarabas@gmail.com",
+      "url": "https://portfolio-ehkarabas.netlify.app/"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "127.0.0.1:8000",
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "securityDefinitions": {
+    "ClassicToken": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Enter your Token (Token key) to login. Example: <b>Token <i>...tokenKey...</i></b>. You need to choose either Token key auth or JWT auth."
+    },
+    "JWTAccess": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Enter your AccessToken (JWT) to login. Example: <b>Bearer <i>...accessToken...</i></b>. You need to choose either Token key auth or JWT auth."
+    },
+    "JWTRefresh": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-Refresh-Token",
+      "description": "Enter your RefreshToken (JWT) to renew your access token. Example: <b>...refreshToken...</b>"
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login <Permissions: Public>",
+        "description": "Login with username (or email) and password for get classicToken and JWT",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Qwer1234!"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/refresh_browsers": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "JWT: Refresh - Cookie <Permissions: Public>",
+        "description": "Refresh access token via cookie.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/refresh_others": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "JWT: Refresh - API <Permissions: Public>",
+        "description": "Refresh access token via refresh token. You need to set your refresh token to X-Refresh-Token header to refresh your access token.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Classic Token Logout <Permissions: Public>",
+        "description": "Delete token key.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get Single User <Permissions: Login>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update User <Permissions: Login>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "test2"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Qwer1234!"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test2@site.com"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "isStaff": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "isAdmin": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete User <Permissions: Admin>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update User <Permissions: Login>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "test2"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Qwer1234!"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test2@site.com"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "isStaff": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "isAdmin": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "List Users <Permissions: Staff>",
+        "description": "\r  You can send query with endpoint for filter[], search[], sort[], page and limit.\r  <ul> Examples:\r  <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>\r  <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>\r  <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>\r  <li>URL/?<b>page=2&limit=1</b></li>\r  </ul>\r  ",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create User <Permissions: Public>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "test"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Qwer1234!"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test@site.com"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "isStaff": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "isAdmin": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cars/{carId}": {
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get Single Car <Permissions: Public>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Cars"],
+        "summary": "Update Car <Permissions: Staff>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "plateNumber": {
+                  "type": "string",
+                  "example": "34CBA987"
+                },
+                "brand": {
+                  "type": "string",
+                  "example": "Ford"
+                },
+                "model": {
+                  "type": "string",
+                  "example": "Mustang"
+                },
+                "year": {
+                  "type": "number",
+                  "example": 1969
+                },
+                "isAutomatic": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "pricePerDay": {
+                  "type": "number",
+                  "example": 220
+                },
+                "isAvailable": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "images": {
+                  "type": "array",
+                  "example": ["/uploads/default_car_image.png"],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "createdId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "updatedId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "summary": "Delete Car <Permissions: Admin>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Cars"],
+        "summary": "Update Car <Permissions: Staff>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "plateNumber": {
+                  "type": "string",
+                  "example": "34CBA987"
+                },
+                "brand": {
+                  "type": "string",
+                  "example": "Ford"
+                },
+                "model": {
+                  "type": "string",
+                  "example": "Mustang"
+                },
+                "year": {
+                  "type": "number",
+                  "example": 1969
+                },
+                "isAutomatic": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "pricePerDay": {
+                  "type": "number",
+                  "example": 220
+                },
+                "isAvailable": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "images": {
+                  "type": "array",
+                  "example": ["/uploads/default_car_image.png"],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "createdId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "updatedId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cars/": {
+      "get": {
+        "tags": ["Cars"],
+        "summary": "List Cars <Permissions: Public>",
+        "description": "\r  You can send query with endpoint for filter[], search[], sort[], page and limit.\r  <ul> Examples:\r  <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>\r  <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>\r  <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>\r  <li>URL/?<b>page=2&limit=1</b></li>\r  </ul>\r  ",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Create Car <Permissions: Staff>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "plateNumber": {
+                  "type": "string",
+                  "example": "34ABC123"
+                },
+                "brand": {
+                  "type": "string",
+                  "example": "Ford"
+                },
+                "model": {
+                  "type": "string",
+                  "example": "Mustang"
+                },
+                "year": {
+                  "type": "number",
+                  "example": 1967
+                },
+                "isAutomatic": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "pricePerDay": {
+                  "type": "number",
+                  "example": 200
+                },
+                "isAvailable": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "images": {
+                  "type": "array",
+                  "example": ["/uploads/default_car_image.png"],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "createdId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "updatedId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reservations/{reservationId}": {
+      "get": {
+        "tags": ["Reservations"],
+        "summary": "Get Single Reservation <Permissions: Login>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Reservations"],
+        "summary": "Update Reservation <Permissions: Staff>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "carId": {
+                  "type": "string",
+                  "example": "660b1ff6bf7f8c0d1730e39b"
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "2024-11-14"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2024-11-20"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reservations"],
+        "summary": "Delete Reservation <Permissions: Admin>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Reservations"],
+        "summary": "Update Reservation <Permissions: Staff>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "carId": {
+                  "type": "string",
+                  "example": "660b1ff6bf7f8c0d1730e39b"
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "2024-11-14"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2024-11-20"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/reservations/": {
+      "get": {
+        "tags": ["Reservations"],
+        "summary": "List Reservations <Permissions: Login>",
+        "description": "\r  You can send query with endpoint for filter[], search[], sort[], page and limit.\r  <ul> Examples:\r  <li>URL/?<b>filter[field1]=value1&filter[field2]=value2</b></li>\r  <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>\r  <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>\r  <li>URL/?<b>page=2&limit=1</b></li>\r  </ul>\r  ",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reservations"],
+        "summary": "Create Reservation <Permissions: Login>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "660b113091cd968f2b061318"
+                },
+                "carId": {
+                  "type": "string",
+                  "example": "660b1ff6bf7f8c0d1730e39b"
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "2024-10-14"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2024-10-20"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "/auth/login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "String"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "password": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "String"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh_others": {
+      "type": "object",
+      "properties": {
+        "GET": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "String"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "description": {
+              "type": "string",
+              "example": "To refresh your access token on the API, set your refresh token in the 'X-Refresh-Token' header using the format '...refreshToken...'."
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh_browsers": {
+      "type": "object",
+      "properties": {
+        "GET": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "String"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "description": {
+              "type": "string",
+              "example": "Just send a GET request to refresh your access token on browsers."
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "type": "object",
+      "properties": {
+        "GET": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "String"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "description": {
+              "type": "string",
+              "example": "To ensure your security when logging out, place your token in the 'Authorization' header with the format 'Token ...tokenKey...'. This procedure will effectively destroy the token."
+            }
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "unique": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "password": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "set": {
+              "type": "function"
+            },
+            "validate": {
+              "type": "array",
+              "example": [
+                null,
+                "Password must contain at least 1 uppercase & lowercase letter, 1 digit, 1 special character and must be between 8 and 16 characters in total."
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "email": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "array",
+              "example": [true, "Email field must be required"],
+              "items": {
+                "type": "string"
+              }
+            },
+            "unique": {
+              "type": "array",
+              "example": [
+                true,
+                "There is this email. Email field must be unique"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "validate": {
+              "type": "array",
+              "example": [null],
+              "items": {
+                "type": "function"
+              }
+            }
+          }
+        },
+        "firstName": {
+          "type": "function"
+        },
+        "lastName": {
+          "type": "function"
+        },
+        "isActive": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "isStaff": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        },
+        "isAdmin": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        }
+      }
+    },
+    "Car": {
+      "type": "object",
+      "properties": {
+        "plateNumber": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "unique": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "brand": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "model": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "trim": {
+              "type": "boolean",
+              "example": true
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "year": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "min": {
+              "type": "number",
+              "example": 1950
+            },
+            "max": {
+              "type": "number",
+              "example": 2025
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "isAutomatic": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        },
+        "pricePerDay": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "min": {
+              "type": "number",
+              "example": 100
+            },
+            "max": {
+              "type": "number",
+              "example": 500
+            }
+          }
+        },
+        "images": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "array",
+              "example": ["/uploads/default_car_image.png"],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "isAvailable": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "default": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "createdId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "User"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "updatedId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "User"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        }
+      }
+    },
+    "Reservation": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "User"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "carId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "Car"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "startDate": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "validate": {
+              "type": "array",
+              "example": [
+                null,
+                "You can create reservations minimum 6 hours later than current time!"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "endDate": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            },
+            "validate": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "validator": {
+                    "type": "function"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "The difference between start and end dates must be at most 30 days!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "amount": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "createdId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "User"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        },
+        "updatedId": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "function"
+            },
+            "ref": {
+              "type": "string",
+              "example": "User"
+            },
+            "required": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "ClassicToken": []
+    },
+    {
+      "JWTAccess": []
+    },
+    {
+      "JWTRefresh": []
+    }
+  ]
+}
